@@ -29,16 +29,12 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Source: https://mvnrepository.com/artifact/io.quarkus/quarkus-junit5 -->
     <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- Optionally: parameterized tests support -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-junit5</artifactId>
+        <version>3.32.1</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
 

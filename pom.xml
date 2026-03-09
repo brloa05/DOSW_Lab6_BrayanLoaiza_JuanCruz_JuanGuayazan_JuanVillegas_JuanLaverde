@@ -29,7 +29,6 @@
   </dependencyManagement>
 
   <dependencies>
-
     <!-- JUnit 5 -->
     <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -37,7 +36,6 @@
         <version>5.11.0</version>
         <scope>test</scope>
     </dependency>
-
   </dependencies>
 
   <build>

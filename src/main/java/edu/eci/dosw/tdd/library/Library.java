@@ -4,10 +4,12 @@ import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
 import edu.eci.dosw.tdd.library.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Library responsible for manage the loans and the users.
@@ -58,10 +60,40 @@ requirements are meet the amount of books is
     *
     * @return The new created loan.
     */
-    public Loan loanABook(String userId, String isbn) {
-        //TODO Implement the logic of loan a book to a user based on the UserId and the isbn.
-        return null;
-    }
+   public Loan loanABook(String userId, String isbn) {
+    Optional<User> userOpt = users.stream()
+            .filter(u -> u.getId() != null && u.getId().equals(userId))
+            .findFirst();
+    if (!userOpt.isPresent()) throw new IllegalArgumentException("User not found");
+    User user = userOpt.get();
+
+    Optional<Book> bookOpt = books.keySet().stream()
+            .filter(b -> b.getIsbn() != null && b.getIsbn().equals(isbn))
+            findFirst();
+    if (!bookOpt.isPresent()) throw new IllegalArgumentException("Book not found");
+
+    Book book = bookOpt.get();
+    Integer amount = books.getOrDefault(book, 0);
+    if (amount <= 0) throw new IllegalStateException("Book not available");
+
+    boolean userHasActive = loans.stream()
+            .anyMatch(l -> l.getUser() != null
+                    && userId.equals(l.getUser().getId())
+                    && l.getBook() != null
+                    && isbn.equals(l.getBook().getIsbn())
+                    && l.getStatus() == LoanStatus.ACTIVE);
+    if (userHasActive) throw new IllegalStateException("User already has active loan for this book");
+
+    books.put(book, amount - 1);
+
+    Loan loan = new Loan();
+    loan.setBook(book);
+    loan.setUser(user);
+    loan.setLoanDate(LocalDateTime.now());
+    loan.setStatus(LoanStatus.ACTIVE);
+    loans.add(loan);
+    return loan;
+}
     
     /**
     * This method return a loan, meaning that the amount of books should be

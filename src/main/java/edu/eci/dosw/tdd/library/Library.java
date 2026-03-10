@@ -4,10 +4,12 @@ import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
 import edu.eci.dosw.tdd.library.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Library responsible for manage the loans and the users.
@@ -37,9 +39,18 @@ this method returns true if the
  * @return true if the book was stored false otherwise.
  */
     public boolean addBook(Book book) {
-        //TODO Implement the logic to add a new book into the map.
-        return false;
+    if (book == null) return false;
+    Optional<Book> existing = books.keySet().stream()
+            .filter(b -> b.getIsbn().equals(book.getIsbn()))
+            .findFirst();
+    if (existing.isPresent()) {
+        Book key = existing.get();
+        books.put(key, books.getOrDefault(key, 0) + 1);
+    } else {
+        books.put(book, 1);
     }
+    return true;
+}
     /**
     * This method creates a new loan with for the User identify by the userId and
 the book identify by the isbn,
@@ -75,9 +86,35 @@ edu.eci.cvds.tdd.library.loan.LoanStatus#RETURNED} and the loan return
     * @return the loan with the RETURNED status.
     */
     public Loan returnLoan(Loan loan) {
-        //TODO Implement the logic of returning a loan.
-        return null;
+    if (loan == null) throw new IllegalArgumentException("Loan is null");
+
+    Optional<Loan> stored = loans.stream()
+            .filter(l -> (l == loan)
+                    || (l.getUser() != null && loan.getUser() != null
+                        && l.getBook() != null && loan.getBook() != null
+                        && l.getUser().getId().equals(loan.getUser().getId())
+                        && l.getBook().getIsbn().equals(loan.getBook().getIsbn())
+                        && l.getStatus() == LoanStatus.ACTIVE))
+            .findFirst();
+
+    if (!stored.isPresent()) throw new IllegalArgumentException("Loan not found or not active");
+
+    Loan found = stored.get();
+    found.setStatus(LoanStatus.RETURNED);
+    found.setReturnDate(LocalDateTime.now());
+
+    Book book = found.getBook();
+    Optional<Book> bookKey = books.keySet().stream()
+            .filter(b -> b.getIsbn().equals(book.getIsbn()))
+            .findFirst();
+    if (bookKey.isPresent()) {
+        books.put(bookKey.get(), books.getOrDefault(bookKey.get(), 0) + 1);
+    } else {
+        books.put(book, 1);
     }
+
+    return found;
+}
 
     public boolean addUser(User user) {
         return users.add(user);

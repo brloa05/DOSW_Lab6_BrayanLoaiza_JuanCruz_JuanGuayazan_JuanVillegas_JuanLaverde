@@ -1,14 +1,25 @@
 package edu.eci.dosw.tdd.library;
-
+import edu.eci.dosw.tdd.library.book.Book;
+import edu.eci.dosw.tdd.library.loan.Loan;
+import edu.eci.dosw.tdd.library.loan.LoanStatus;
+import edu.eci.dosw.tdd.library.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
+    private Library library;
 
+    
     @BeforeEach
-    public void setUp() {
-        // Configuración inicial
+    public void setup() {
+        library = new Library();
+        User u = new User();
+        u.setId("u1"); u.setName("Juan");
+        library.addUser(u);
+        Book b = new Book("Title","Author","isbn-123");
+        library.addBook(b);
     }
 
     // ========== PRUEBAS PARA addBook ==========
@@ -40,9 +51,13 @@ public class LibraryTest {
 
     // ========== PRUEBAS PARA loanABook ==========
 
-    @Test
-    public void testLoanABook1() {
-        // TODO: Implementar caso de prueba 1
+   @Test
+    public void loanABook_validUserAndAvailableBook_createsActiveLoan() {
+        Loan loan = library.loanABook("u1","isbn-123");
+        assertNotNull(loan);
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
+        assertEquals("isbn-123", loan.getBook().getIsbn());
+        assertEquals("u1", loan.getUser().getId());
     }
 
     @Test

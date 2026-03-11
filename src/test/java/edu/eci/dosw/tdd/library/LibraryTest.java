@@ -50,9 +50,11 @@ public class LibraryTest {
     }
 
     @Test
-    public void testAddBook2() {
-        // TODO: Implementar caso de prueba 2
-    }
+    public void testAddBookDuplicado() {
+        Book sameBook = new Book("Title","Author","isbn-123");
+        boolean result = library.addBook(sameBook);
+        assertTrue(result);
+}
 
     @Test
     public void testAddBook3() {
@@ -71,16 +73,16 @@ public class LibraryTest {
 
     // ========== PRUEBAS PARA loanABook ==========
 
-   @Test
-    public void testLoanABook1() {
-        // TODO: Implementar caso de prueba 1
-    }
+    @Test
+    public void testLoanABookUsuarioInexistente() {
+        Loan loan = library.loanABook("usuario-inexistente", "isbn-123");
+        assertNull(loan);
+}
 
     @Test
     public void testLoanABook2() {
 
         Loan loan = library.loanABook("u1","isbn-123");
-
         assertNotNull(loan);
         assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
@@ -127,8 +129,10 @@ public class LibraryTest {
     }
 
     @Test
-    public void testReturnLoan3() {
-        // TODO: Implementar caso de prueba 3
+    public void testReturnLoanInexistente() {
+        Loan loanFalso = new Loan();
+        Loan result = library.returnLoan(loanFalso);
+        assertNull(result);
     }
 
     @Test

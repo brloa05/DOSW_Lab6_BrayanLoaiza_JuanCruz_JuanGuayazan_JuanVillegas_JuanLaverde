@@ -26,7 +26,12 @@ public class LibraryTest {
 
     @Test
     public void testAddBook1() {
-        // TODO: Implementar caso de prueba 1
+
+        Book newBook = new Book("Clean Code","Robert Martin","isbn-999");
+
+        boolean result = library.addBook(newBook);
+
+        assertTrue(result);
     }
 
     @Test
@@ -58,7 +63,11 @@ public class LibraryTest {
 
     @Test
     public void testLoanABook2() {
-        // TODO: Implementar caso de prueba 2
+
+        Loan loan = library.loanABook("u1","isbn-123");
+
+        assertNotNull(loan);
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
 
     @Test
@@ -94,7 +103,12 @@ public class LibraryTest {
 
     @Test
     public void testReturnLoan2() {
-        // TODO: Implementar caso de prueba 2
+
+        Loan loan = library.loanABook("u1","isbn-123");
+
+        Loan returned = library.returnLoan(loan);
+
+        assertEquals("isbn-123", returned.getBook().getIsbn());
     }
 
     @Test

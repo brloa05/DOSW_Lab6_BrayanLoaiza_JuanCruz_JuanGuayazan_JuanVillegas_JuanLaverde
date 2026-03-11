@@ -58,16 +58,16 @@ public class LibraryTest {
 
     // ========== PRUEBAS PARA loanABook ==========
 
-   @Test
-    public void testLoanABook1() {
-        // TODO: Implementar caso de prueba 1
-    }
+    @Test
+    public void testLoanABookUsuarioInexistente() {
+        Loan loan = library.loanABook("usuario-inexistente", "isbn-123");
+        assertNull(loan);
+}
 
     @Test
     public void testLoanABook2() {
 
         Loan loan = library.loanABook("u1","isbn-123");
-
         assertNotNull(loan);
         assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }

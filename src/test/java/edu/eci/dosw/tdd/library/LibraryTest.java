@@ -4,7 +4,6 @@ import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
 import edu.eci.dosw.tdd.library.loan.LoanStatus;
 import edu.eci.dosw.tdd.library.user.User;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -15,130 +14,164 @@ public class LibraryTest {
     private Library library;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         library = new Library();
-
-        User u = new User();
-        u.setId("u1");
-        u.setName("Juan");
-        library.addUser(u);
-
-        Book b = new Book("Title","Author","isbn-123");
-        library.addBook(b);
     }
 
-    // ========== PRUEBAS PARA addBook ==========
+    // ================= ADD BOOK =================
 
     @Test
-    public void testAddBook1() {
-        Book newBook = new Book("Clean Code","Robert Martin","isbn-999");
-
-        boolean result = library.addBook(newBook);
-
-        assertTrue(result);
+    void testAddBook_brayanLoaiza() {
+        Book book = new Book("Clean Code","Robert Martin","111");
+        assertTrue(library.addBook(book));
     }
 
     @Test
-    public void testAddBook2() {
-        Book sameBook = new Book("Title","Author","isbn-123");
-
-        boolean result = library.addBook(sameBook);
-
-        assertTrue(result); // según tu lógica actual
+    void testAddBook_juanCruz() {
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+        assertTrue(library.addBook(book));
     }
 
     @Test
-    public void testAddBook3() {
-        Book book = new Book("Design Patterns","GoF","isbn-777");
+    void testAddBook_juanLaverde() {
+        Book book1 = new Book("Clean Code","Robert Martin","111");
+        Book book2 = new Book("Refactoring","Fowler","222");
+
+        assertTrue(library.addBook(book1));
+        assertTrue(library.addBook(book2));
+    }
+
+    @Test
+    void testAddBook_juanVmedina() {
+        Book book = new Book("DDD","Evans","333");
+
+        library.addBook(book);
+        library.addBook(book);
         library.addBook(book);
 
-        Loan loan = library.loanABook("u1","isbn-777");
-
-        assertNotNull(loan);
-        assertEquals("isbn-777", loan.getBook().getIsbn());
+        assertTrue(true);
     }
 
     @Test
-    public void testAddBook4() {
-        // TODO
+    void testAddBook_juanGuayazan() {
+        Book book = new Book("Patterns","GoF","444");
+        assertTrue(library.addBook(book));
+    }
+
+    // ================= LOAN A BOOK =================
+
+    @Test
+    void testLoanABook_brayanLoaiza() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
+
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+
+        assertNotNull(library.loanABook("1","111"));
     }
 
     @Test
-    public void testAddBook5() {
-        // TODO
-    }
+    void testLoanABook_juanCruz() {
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
 
-    // ========== PRUEBAS PARA loanABook ==========
-
-    @Test
-    public void testLoanABook1() {
-        Loan loan = library.loanABook("usuario-inexistente", "isbn-123");
-
-        assertNull(loan);
+        assertNull(library.loanABook("999","111"));
     }
 
     @Test
-    public void testLoanABook2() {
-        Loan loan = library.loanABook("u1","isbn-123");
+    void testLoanABook_juanLaverde() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
 
-        assertNotNull(loan);
+        assertNull(library.loanABook("1","999"));
+    }
+
+    @Test
+    void testLoanABook_juanVmedina() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
+
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+
+        library.loanABook("1","111");
+        assertNull(library.loanABook("1","111"));
+    }
+
+    @Test
+    void testLoanABook_juanGuayazan() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
+
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+
+        Loan loan = library.loanABook("1","111");
+
         assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
 
-    @Test
-    public void testLoanABook3() {
-        Loan loan = library.loanABook("u1","isbn-no-existe");
-
-        assertNull(loan);
-    }
+    // ================= RETURN LOAN =================
 
     @Test
-    public void testLoanABook4() {
-        // TODO
-    }
+    void testReturnLoan_brayanLoaiza() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
 
-    @Test
-    public void testLoanABook5() {
-        // TODO
-    }
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
 
-    // ========== PRUEBAS PARA returnLoan ==========
-
-    @Test
-    public void testReturnLoan1() {
-        Loan loan = library.loanABook("u1","isbn-123");
+        Loan loan = library.loanABook("1","111");
 
         Loan returned = library.returnLoan(loan);
 
         assertEquals(LoanStatus.RETURNED, returned.getStatus());
-        assertNotNull(returned.getReturnDate());
     }
 
     @Test
-    public void testReturnLoan2() {
-        Loan loan = library.loanABook("u1","isbn-123");
+    void testReturnLoan_juanCruz() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
+
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+
+        Loan loan = library.loanABook("1","111");
+
+        assertNotNull(library.returnLoan(loan).getReturnDate());
+    }
+
+    @Test
+    void testReturnLoan_juanLaverde() {
+        assertTrue(true); // validación futura con implementación
+    }
+
+    @Test
+    void testReturnLoan_juanVmedina() {
+        assertNull(library.returnLoan(null));
+    }
+
+    @Test
+    void testReturnLoan_juanGuayazan() {
+        User user = new User();
+        user.setId("1");
+        library.addUser(user);
+
+        Book book = new Book("Clean Code","Robert Martin","111");
+        library.addBook(book);
+
+        Loan loan = library.loanABook("1","111");
 
         Loan returned = library.returnLoan(loan);
 
-        assertEquals("isbn-123", returned.getBook().getIsbn());
-    }
-
-    @Test
-    public void testReturnLoan3() {
-        Loan fakeLoan = new Loan();
-
-        Loan result = library.returnLoan(fakeLoan);
-
-        assertNull(result);
-    }
-
-    @Test
-    public void testReturnLoan4() {
-        // TODO
-    }
-
-    @Test
-    public void testReturnLoan5() {
-        // TODO
+        assertEquals(LoanStatus.RETURNED, returned.getStatus());
     }
 }

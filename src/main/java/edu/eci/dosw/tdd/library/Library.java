@@ -2,16 +2,15 @@ package edu.eci.dosw.tdd.library;
 
 import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
+import edu.eci.dosw.tdd.library.loan.LoanStatus;
 import edu.eci.dosw.tdd.library.user.User;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Library responsible for manage the loans and the users.
- */
 public class Library {
 
     private final List<User> users;
@@ -23,64 +22,89 @@ public class Library {
         books = new HashMap<>();
         loans = new ArrayList<>();
     }
-/**
- * Adds a new {@link edu.eci.cvds.tdd.library.book.Book} into the system, the
-book is store in a Map that contains
- * the {@link edu.eci.cvds.tdd.library.book.Book} and the amount of books
-available, if the book already exist the
- * amount should increase by 1 and if the book is new the amount should be 1,
-this method returns true if the
- * operation is successful false otherwise.
- *
- * @param book The book to store in the map.
- *
- * @return true if the book was stored false otherwise.
- */
+
+    // ================= addBook =================
+
     public boolean addBook(Book book) {
-        //TODO Implement the logic to add a new book into the map.
-        return false;
+        if (book == null) return false;
+
+        books.put(book, books.getOrDefault(book, 0) + 1);
+        return true;
     }
-    /**
-    * This method creates a new loan with for the User identify by the userId and
-the book identify by the isbn,
-    * the loan should be store in the list of loans, to successfully create a
-loan is required to validate that the
-    * book is available, that the user exist and the same user could not have a
-loan for the same book
-    * {@link edu.eci.cvds.tdd.library.loan.LoanStatus#ACTIVE}, once these
-requirements are meet the amount of books is
-    * decreased and the loan should be created with {@link
-    edu.eci.cvds.tdd.library.loan.LoanStatus#ACTIVE} status and
-    * the loan date should be the current date.
-    *
-    * @param userId id of the user.
-    * @param isbn book identification.
-    *
-    * @return The new created loan.
-    */
+
+    // ================= loanABook =================
+
     public Loan loanABook(String userId, String isbn) {
-        //TODO Implement the logic of loan a book to a user based on the UserId and the isbn.
-        return null;
+
+        // buscar usuario
+        User user = users.stream()
+                .filter(u -> u.getId().equals(userId))
+                .findFirst()
+                .orElse(null);
+
+        if (user == null) return null;
+
+        // buscar libro
+        Book book = books.keySet().stream()
+                .filter(b -> b.getIsbn().equals(isbn))
+                .findFirst()
+                .orElse(null);
+
+        if (book == null) return null;
+
+        // validar disponibilidad
+        Integer amount = books.get(book);
+        if (amount == null || amount <= 0) return null;
+
+        // validar préstamo activo existente
+        boolean hasActiveLoan = loans.stream()
+                .anyMatch(l ->
+                        l.getUser().getId().equals(userId) &&
+                                l.getBook().getIsbn().equals(isbn) &&
+                                l.getStatus() == LoanStatus.ACTIVE
+                );
+
+        if (hasActiveLoan) return null;
+
+        // crear préstamo
+        Loan loan = new Loan();
+        loan.setUser(user);
+        loan.setBook(book);
+        loan.setStatus(LoanStatus.ACTIVE);
+        loan.setLoanDate(LocalDateTime.now());
+
+        loans.add(loan);
+
+        // disminuir cantidad
+        books.put(book, amount - 1);
+
+        return loan;
     }
-    
-    /**
-    * This method return a loan, meaning that the amount of books should be
-increased by 1, the status of the Loan
-    * in the loan list should be {@link
-edu.eci.cvds.tdd.library.loan.LoanStatus#RETURNED} and the loan return
-    * date should be the current date, validate that the loan exist.
-    *
-    * @param loan loan to return.
-    *
-    * @return the loan with the RETURNED status.
-    */
+
+    // ================= returnLoan =================
+
     public Loan returnLoan(Loan loan) {
-        //TODO Implement the logic of returning a loan.
-        return null;
+
+        if (loan == null || !loans.contains(loan)) {
+            return null;
+        }
+
+        if (loan.getStatus() == LoanStatus.RETURNED) {
+            return loan;
+        }
+
+        // aumentar cantidad libro
+        Book book = loan.getBook();
+        books.put(book, books.getOrDefault(book, 0) + 1);
+
+        // actualizar préstamo
+        loan.setStatus(LoanStatus.RETURNED);
+        loan.setReturnDate(LocalDateTime.now());
+
+        return loan;
     }
 
     public boolean addUser(User user) {
         return users.add(user);
     }
-
 }

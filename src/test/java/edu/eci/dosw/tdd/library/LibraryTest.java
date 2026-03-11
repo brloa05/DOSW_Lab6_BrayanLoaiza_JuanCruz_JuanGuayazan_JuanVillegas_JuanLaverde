@@ -6,15 +6,26 @@ import edu.eci.dosw.tdd.library.loan.LoanStatus;
 import edu.eci.dosw.tdd.library.user.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
+    private Library library;
 
     private Library library;
 
     @BeforeEach
     public void setup() {
         library = new Library();
+    
+   @BeforeEach
+    public void setup() {
+        library = new Library();
+        User u = new User();
+        u.setId("u1"); u.setName("Juan");
+        library.addUser(u);
+        Book b = new Book("Title","Author","isbn-123");
+        library.addBook(b);
     }
 
     // ========== PRUEBAS PARA addBook ==========
@@ -29,6 +40,13 @@ public class LibraryTest {
         Loan loan = library.loanABook("uX","isbn-2");
         assertNotNull(loan);
         assertEquals(LoanStatus.ACTIVE, loan.getStatus());
+    public void testAddBook1() {
+
+        Book newBook = new Book("Clean Code","Robert Martin","isbn-999");
+
+        boolean result = library.addBook(newBook);
+
+        assertTrue(result);
     }
 
     @Test
@@ -53,14 +71,18 @@ public class LibraryTest {
 
     // ========== PRUEBAS PARA loanABook ==========
 
-    @Test
+   @Test
     public void testLoanABook1() {
         // TODO: Implementar caso de prueba 1
     }
 
     @Test
     public void testLoanABook2() {
-        // TODO: Implementar caso de prueba 2
+
+        Loan loan = library.loanABook("u1","isbn-123");
+
+        assertNotNull(loan);
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
 
     @Test
@@ -81,13 +103,27 @@ public class LibraryTest {
     // ========== PRUEBAS PARA returnLoan ==========
 
     @Test
-    public void testReturnLoan1() {
-        // TODO: Implementar caso de prueba 1
+    public void returnLoan_existingActiveLoan_setsStatusReturned_and_incrementsBookAmount() {
+        Loan loan = library.loanABook("u1","isbn-123");
+        assertNotNull(loan);
+        Loan returned = library.returnLoan(loan);
+        assertEquals(LoanStatus.RETURNED, returned.getStatus());
+        assertNotNull(returned.getReturnDate());
+        User u2 = new User();
+        u2.setId("u2"); u2.setName("Ana");
+        library.addUser(u2);
+        Loan loan2 = library.loanABook("u2","isbn-123");
+        assertNotNull(loan2);
     }
 
     @Test
     public void testReturnLoan2() {
-        // TODO: Implementar caso de prueba 2
+
+        Loan loan = library.loanABook("u1","isbn-123");
+
+        Loan returned = library.returnLoan(loan);
+
+        assertEquals("isbn-123", returned.getBook().getIsbn());
     }
 
     @Test

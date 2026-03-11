@@ -1,4 +1,5 @@
 package edu.eci.dosw.tdd.library;
+
 import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
 import edu.eci.dosw.tdd.library.loan.LoanStatus;
@@ -9,14 +10,18 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LibraryTest {
+
     private Library library;
 
     @BeforeEach
     public void setup() {
         library = new Library();
+
         User u = new User();
-        u.setId("u1"); u.setName("Juan");
+        u.setId("u1");
+        u.setName("Juan");
         library.addUser(u);
+
         Book b = new Book("Title","Author","isbn-123");
         library.addBook(b);
     }
@@ -24,18 +29,26 @@ public class LibraryTest {
     // ========== PRUEBAS PARA addBook ==========
 
     @Test
-    public void testAddBook1() {
+    public void addBook_newBook_returnsTrue_and_allowsOneLoan() {
+        Book b = new Book("T2","A2","isbn-2");
+        assertTrue(library.addBook(b));
 
-        Book newBook = new Book("Clean Code","Robert Martin","isbn-999");
+        User u = new User();
+        u.setId("uX");
+        u.setName("UsuarioX");
+        library.addUser(u);
 
-        boolean result = library.addBook(newBook);
+        Loan loan = library.loanABook("uX","isbn-2");
 
-        assertTrue(result);
+        assertNotNull(loan);
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
 
     @Test
-    public void testAddBook2() {
-        // TODO: Implementar caso de prueba 2
+    public void testAddBookDuplicado() {
+        Book sameBook = new Book("Title","Author","isbn-123");
+        boolean result = library.addBook(sameBook);
+        assertTrue(result);
     }
 
     @Test
@@ -64,8 +77,9 @@ public class LibraryTest {
     // ========== PRUEBAS PARA loanABook ==========
 
     @Test
-    public void testLoanABook1() {
-        // TODO: Implementar caso de prueba 1
+    public void testLoanABookUsuarioInexistente() {
+        Loan loan = library.loanABook("usuario-inexistente", "isbn-123");
+        assertNull(loan);
     }
 
     @Test
@@ -80,7 +94,7 @@ public class LibraryTest {
     @Test
     public void testLoanABook3() {
 
-        Loan loan = library.loanABook("user-not-exist","isbn-123");
+        Loan loan = library.loanABook("u1","isbn-no-existe");
 
         assertNull(loan);
     }
@@ -100,14 +114,21 @@ public class LibraryTest {
     @Test
     public void returnLoan_existingActiveLoan_setsStatusReturned_and_incrementsBookAmount() {
         Loan loan = library.loanABook("u1","isbn-123");
+
         assertNotNull(loan);
+
         Loan returned = library.returnLoan(loan);
+
         assertEquals(LoanStatus.RETURNED, returned.getStatus());
         assertNotNull(returned.getReturnDate());
+
         User u2 = new User();
-        u2.setId("u2"); u2.setName("Ana");
+        u2.setId("u2");
+        u2.setName("Ana");
         library.addUser(u2);
+
         Loan loan2 = library.loanABook("u2","isbn-123");
+
         assertNotNull(loan2);
     }
 
@@ -122,13 +143,13 @@ public class LibraryTest {
     }
 
     @Test
-    public void testReturnLoan3() {
+    public void testReturnLoanInexistente() {
 
-        Loan loan = library.loanABook("u1","isbn-123");
+        Loan loanFalso = new Loan();
 
-        library.returnLoan(loan);
+        Loan result = library.returnLoan(loanFalso);
 
-        assertNotNull(loan.getReturnDate());
+        assertNull(result);
     }
 
     @Test

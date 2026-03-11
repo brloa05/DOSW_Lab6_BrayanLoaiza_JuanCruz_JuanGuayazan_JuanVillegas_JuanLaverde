@@ -35,9 +35,11 @@ public class LibraryTest {
     }
 
     @Test
-    public void testAddBook2() {
-        // TODO: Implementar caso de prueba 2
-    }
+    public void testAddBookDuplicado() {
+        Book sameBook = new Book("Title","Author","isbn-123");
+        boolean result = library.addBook(sameBook);
+        assertTrue(result);
+}
 
     @Test
     public void testAddBook3() {

@@ -1,4 +1,5 @@
 package edu.eci.dosw.tdd.library;
+
 import edu.eci.dosw.tdd.library.book.Book;
 import edu.eci.dosw.tdd.library.loan.Loan;
 import edu.eci.dosw.tdd.library.loan.LoanStatus;
@@ -11,6 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LibraryTest {
     private Library library;
 
+    private Library library;
+
+    @BeforeEach
+    public void setup() {
+        library = new Library();
     
    @BeforeEach
     public void setup() {
@@ -25,6 +31,15 @@ public class LibraryTest {
     // ========== PRUEBAS PARA addBook ==========
 
     @Test
+    public void addBook_newBook_returnsTrue_and_allowsOneLoan() {
+        Book b = new Book("T2","A2","isbn-2");
+        assertTrue(library.addBook(b)); 
+        User u = new User();
+        u.setId("uX"); u.setName("UsuarioX");
+        library.addUser(u);
+        Loan loan = library.loanABook("uX","isbn-2");
+        assertNotNull(loan);
+        assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     public void testAddBook1() {
 
         Book newBook = new Book("Clean Code","Robert Martin","isbn-999");

@@ -114,8 +114,10 @@ public class LibraryTest {
     }
 
     @Test
-    public void testReturnLoan3() {
-        // TODO: Implementar caso de prueba 3
+    public void testReturnLoanInexistente() {
+        Loan loanFalso = new Loan();
+        Loan result = library.returnLoan(loanFalso);
+        assertNull(result);
     }
 
     @Test

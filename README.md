@@ -1,1 +1,2 @@
-# DOSW_Lab6_BrayanLoaiza_JuanCruz:JuanGuayazan_JuanVillegas_JuanLaverde
+Cobertura de Jacoco:
+![alt text](image.png)

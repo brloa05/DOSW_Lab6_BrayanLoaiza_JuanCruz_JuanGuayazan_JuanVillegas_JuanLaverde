@@ -18,7 +18,6 @@ public class LibraryTest {
         library = new Library();
     }
 
-    // ================= ADD BOOK =================
 
     @Test
     void testAddBook_brayanLoaiza() {
@@ -59,7 +58,6 @@ public class LibraryTest {
         assertTrue(library.addBook(book));
     }
 
-    // ================= LOAN A BOOK =================
 
     @Test
     void testLoanABook_brayanLoaiza() {
@@ -117,7 +115,6 @@ public class LibraryTest {
         assertEquals(LoanStatus.ACTIVE, loan.getStatus());
     }
 
-    // ================= RETURN LOAN =================
 
     @Test
     void testReturnLoan_brayanLoaiza() {
@@ -151,7 +148,7 @@ public class LibraryTest {
 
     @Test
     void testReturnLoan_juanLaverde() {
-        assertTrue(true); // validación futura con implementación
+        assertTrue(true);
     }
 
     @Test

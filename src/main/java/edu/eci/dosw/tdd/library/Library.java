@@ -23,8 +23,6 @@ public class Library {
         loans = new ArrayList<>();
     }
 
-    // ================= addBook =================
-
     public boolean addBook(Book book) {
         if (book == null) return false;
 
@@ -32,11 +30,9 @@ public class Library {
         return true;
     }
 
-    // ================= loanABook =================
 
     public Loan loanABook(String userId, String isbn) {
 
-        // buscar usuario
         User user = users.stream()
                 .filter(u -> u.getId().equals(userId))
                 .findFirst()
@@ -44,7 +40,6 @@ public class Library {
 
         if (user == null) return null;
 
-        // buscar libro
         Book book = books.keySet().stream()
                 .filter(b -> b.getIsbn().equals(isbn))
                 .findFirst()
@@ -52,11 +47,9 @@ public class Library {
 
         if (book == null) return null;
 
-        // validar disponibilidad
         Integer amount = books.get(book);
         if (amount == null || amount <= 0) return null;
 
-        // validar préstamo activo existente
         boolean hasActiveLoan = loans.stream()
                 .anyMatch(l ->
                         l.getUser().getId().equals(userId) &&
@@ -66,7 +59,6 @@ public class Library {
 
         if (hasActiveLoan) return null;
 
-        // crear préstamo
         Loan loan = new Loan();
         loan.setUser(user);
         loan.setBook(book);
@@ -75,13 +67,10 @@ public class Library {
 
         loans.add(loan);
 
-        // disminuir cantidad
         books.put(book, amount - 1);
 
         return loan;
     }
-
-    // ================= returnLoan =================
 
     public Loan returnLoan(Loan loan) {
 
@@ -93,11 +82,9 @@ public class Library {
             return loan;
         }
 
-        // aumentar cantidad libro
         Book book = loan.getBook();
         books.put(book, books.getOrDefault(book, 0) + 1);
 
-        // actualizar préstamo
         loan.setStatus(LoanStatus.RETURNED);
         loan.setReturnDate(LocalDateTime.now());
 

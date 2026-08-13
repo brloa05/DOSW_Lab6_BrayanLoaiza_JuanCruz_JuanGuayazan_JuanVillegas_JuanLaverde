@@ -1,18 +1,46 @@
 # Laboratorio 7: TDD, cubrimiento y análisis estático
 
-* BRAYAN LOAIZA LEAL​
-* JUAN ESTEBAN CRUZ RICO​
-* JUAN JOSÉ LAVERDE RÍOS
-* JUAN MANUEL VILLEGAS MEDINA
-* JUAN SEBASTIÁN GUAYAZÁN CLAVIJO
+Aplicación de TDD sobre un sistema de gestión de bibliotecas, con medición de cobertura (JaCoCo) y análisis estático de código (SonarQube).
 
-Desarrollo y Operaciones Software (ISIS DOSW-301)     
-Decanatura Ingeniería de Sistemas     
-Ingeniería de Sistemas    
-Escuela Colombiana de Ingeniería Julio Garavito     
-2026-1    ​
+## Autores
 
-## Contexto del laboratorio
+BRAYAN LOAIZA LEAL, JUAN ESTEBAN CRUZ RICO, JUAN JOSÉ LAVERDE RÍOS, JUAN MANUEL VILLEGAS MEDINA y JUAN SEBASTIÁN GUAYAZÁN CLAVIJO
+Desarrollo y Operaciones Software (ISIS DOSW-301)
+Decanatura Ingeniería de Sistemas
+Ingeniería de Sistemas
+Escuela Colombiana de Ingeniería Julio Garavito
+2026-1
+
+## Estructura del proyecto
+
+```
+DOSW_Lab6_BrayanLoaiza_JuanCruz_JuanGuayazan_JuanVillegas_JuanLaverde/
+├── pom.xml
+├── src/
+│   ├── main/java/edu/eci/dosw/tdd/
+│   │   ├── App.java
+│   │   └── library/
+│   │       ├── Library.java
+│   │       ├── book/Book.java
+│   │       ├── loan/Loan.java
+│   │       ├── loan/LoanStatus.java
+│   │       └── user/User.java
+│   └── test/java/edu/eci/dosw/tdd/
+│       ├── AppTest.java
+│       └── library/LibraryTest.java
+└── image.png
+```
+
+## Cómo ejecutar
+
+```bash
+mvn test
+mvn verify   # ejecuta pruebas + genera reporte de cobertura JaCoCo
+```
+
+## Contexto y conceptos clave
+
+### Resumen del laboratorio
 
 Aplicación de TDD como fundamento de estructuración técnica, sobre un sistema de gestión de bibliotecas (`edu.eci.dosw.tdd`) con las clases `Book`, `User`, `Loan`/`LoanStatus` y `Library`. El laboratorio tuvo dos partes:
 
@@ -23,3 +51,15 @@ Aplicación de TDD como fundamento de estructuración técnica, sobre un sistema
    - Análisis estático de código con **SonarQube** (contenedor Docker), integrado a Maven vía `sonar-maven-plugin` y el reporte de JaCoCo.
    - Cada paso se desarrolló en ramas `feature/*` independientes, integradas a `develop` mediante Pull Requests revisados por un integrante distinto de quien los creó.
 2. **Proyecto del curso**: diagrama de clases y esqueletos TDD para las historias de usuario del primer sprint del proyecto TechCup Fútbol.
+
+### Conceptos clave
+
+- TDD (Test-Driven Development): prueba antes que código
+- JUnit 5 para pruebas unitarias
+- JaCoCo para cobertura de pruebas
+- SonarQube para análisis estático de calidad de código
+- Flujo de ramas `feature/*` con revisión por pares (Pull Requests)
+
+### Resultados
+
+Los métodos `addBook`, `loanABook` y `returnLoan` de `Library` quedan implementados y validados por TDD, con cobertura de pruebas medida por paquete y análisis estático de calidad verificado en SonarQube.

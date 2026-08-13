@@ -1,4 +1,4 @@
-# LABORATORIO 7: TDD - CUBRIMIENTO - ANÁLISIS ESTÁTICO
+# Laboratorio 7: TDD, cubrimiento y análisis estático
 
 * BRAYAN LOAIZA LEAL​
 * JUAN ESTEBAN CRUZ RICO​
